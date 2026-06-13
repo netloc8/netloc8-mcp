@@ -4,7 +4,7 @@ go 1.26.2
 
 require (
 	github.com/modelcontextprotocol/go-sdk v1.6.1
-	github.com/netloc8/netloc8-go v1.2.0
+	github.com/netloc8/netloc8-go v1.2.1
 )
 
 require (
