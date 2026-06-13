@@ -238,7 +238,8 @@ func registerValidateIP(server *mcp.Server) {
 			Name:  "validate_ip",
 			Title: "Validate IP Address",
 			Description: "Check if a string is a valid IPv4 or IPv6 address. " +
-				"Returns true or false. Useful for input validation before making a geo lookup. " +
+				"Returns a human-readable message stating whether the input is valid. " +
+				"Useful for input validation before making a geo lookup. " +
 				"Example: ip=\"8.8.8.8\" → valid, ip=\"not-an-ip\" → invalid. " +
 				"Runs locally — no API call, no quota usage.",
 			Annotations: localAnnotations,
@@ -562,7 +563,7 @@ func registerGetSubnet(server *mcp.Server) {
 			Name:  "get_subnet",
 			Title: "Get Subnet",
 			Description: "Derive the /24 CIDR prefix from an IPv4 address (e.g. 8.8.8.8 → 8.8.8.0/24). " +
-				"Returns empty for IPv6 addresses. " +
+				"For IPv6 or invalid addresses, returns a message explaining why no /24 subnet applies. " +
 				"Runs locally — no API call, no quota usage.",
 			Annotations: localAnnotations,
 		},
