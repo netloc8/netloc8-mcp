@@ -1,10 +1,65 @@
 # NetLoc8 MCP Server
 
-An [MCP](https://modelcontextprotocol.io) server that gives AI assistants access to [NetLoc8](https://netloc8.com) — IP geolocation deployed to 300+ edge locations worldwide.
+[![Go Reference](https://pkg.go.dev/badge/github.com/netloc8/netloc8-mcp.svg)](https://pkg.go.dev/github.com/netloc8/netloc8-mcp)
+[![Go 1.26+](https://img.shields.io/badge/go-1.26%2B-00ADD8?logo=go)](https://go.dev/dl/)
+[![License: ELv2](https://img.shields.io/badge/license-ELv2-blue)](LICENSE)
 
-Works **with or without** an API key. Without a key, you get country-level geo data and local utility tools. With a free key, you unlock city-level detail, coordinates, timezone, and account management.
+An [MCP](https://modelcontextprotocol.io) server that gives AI assistants access
+to [NetLoc8](https://netloc8.com) — IP geolocation deployed to 300+ edge
+locations worldwide.
 
-## Installation
+Works **with or without** an API key. Without a key, you get country-level geo
+data and local utility tools. With a free key, you unlock city-level detail,
+coordinates, timezone, and account management.
+
+## Why?
+
+AI coding assistants run into IP geolocation constantly — parsing access logs,
+debugging proxy chains, geo-routing traffic, checking EU compliance, verifying
+CDN behavior. Without an MCP server, you have to copy-paste results from a
+browser tab. With this server, your AI assistant resolves IPs inline, in context,
+without breaking flow.
+
+- **Zero-config** — `go install` and add three lines to your MCP config
+- **Works without a key** — country-level lookups and local IP utilities with no sign-up
+- **14 tools** — geo lookup, timezone, IP validation, subnet math, account management
+- **4 guided prompts** — IP analysis, security audit, batch comparison, onboarding
+- **Freemium built in** — unauthenticated users see upgrade hints for city-level data
+
+## Example
+
+Ask your AI assistant:
+
+> Where is 8.8.8.8?
+
+The assistant calls `geolocate_ip` and responds with something like:
+
+```
+8.8.8.8 is located in Mountain View, California, US.
+
+  Country     United States (US) 🇺🇸
+  Region      California (CA)
+  City        Mountain View
+  Coordinates 37.386, -122.084
+  Timezone    America/Los_Angeles (UTC-07:00)
+  ASN         AS15169
+  Org         Google LLC
+  EU member   No
+```
+
+Other things you can ask:
+
+| Prompt | What happens |
+|--------|-------------|
+| "Where is my server?" | Calls `geolocate_me` to look up the machine's own IP |
+| "Is 10.0.0.1 a public IP?" | Calls `is_public_ip` locally — no API call, no quota |
+| "Analyze 203.0.113.42" | Runs the `analyze_ip` prompt — classification, geo, network, timezone in one report |
+| "Compare these IPs: 8.8.8.8, 1.1.1.1, 208.67.222.222" | Runs `batch_geolocate` — table with country, city, ASN for each |
+| "Audit my NetLoc8 account" | Runs `security_audit` — reviews API keys, recent activity, usage |
+| "What subnet is 203.0.113.42 in?" | Calls `get_subnet` locally — returns `203.0.113.0/24` |
+| "Set me up with NetLoc8 for Next.js" | Runs `getting_started` — creates a key, verifies it, shows SDK install |
+
+## Install
 
 Requires [Go 1.26+](https://go.dev/dl/).
 
@@ -180,12 +235,16 @@ Add to `~/.gemini/config/mcp_config.json`:
 
 ## Prompts
 
+Prompts are guided workflows that chain multiple tools together. Select them from
+your MCP client's prompt picker, or just describe what you want — most clients
+will match you to the right prompt automatically.
+
 | Prompt | Description |
 |---|---|
-| `analyze_ip` | Deep-dive analysis of a single IP address |
-| `security_audit` | Security-focused review of an IP address |
-| `batch_geolocate` | Geolocate and summarize a list of IPs |
-| `getting_started` | Guided onboarding for new NetLoc8 users |
+| `analyze_ip` | Deep-dive analysis of a single IP — classification, geolocation, network, timezone, EU status |
+| `security_audit` | Review your NetLoc8 account — API key inventory, recent activity, usage, recommendations |
+| `batch_geolocate` | Look up multiple IPs and produce a comparison table |
+| `getting_started` | Guided onboarding — create a key, verify it, get SDK install instructions for your platform |
 
 ## Resources
 
@@ -211,3 +270,7 @@ Add to `~/.gemini/config/mcp_config.json`:
 - [Go SDK](https://pkg.go.dev/github.com/netloc8/netloc8-go)
 - [npm packages](https://www.npmjs.com/org/netloc8)
 - [MCP Specification](https://modelcontextprotocol.io)
+
+## License
+
+[Elastic License 2.0 (ELv2)](LICENSE)
