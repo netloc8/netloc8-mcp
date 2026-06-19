@@ -1,20 +1,15 @@
-FROM golang:1.26-alpine AS builder
+# Multi-stage build for the NetLoc8 MCP server.
+# Stage 1: compile the Go binary.
+# Stage 2: copy into a minimal Alpine image.
 
-WORKDIR /app
-
-# Copy dependency files
+FROM golang:1.26-alpine AS build
+WORKDIR /src
 COPY go.mod go.sum ./
 RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 go build -o /netloc8-mcp .
 
-# Copy source files
-COPY *.go ./
-
-# Build the binary
-RUN CGO_ENABLED=0 GOOS=linux go build -o netloc8-mcp .
-
-# Final stage
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
-COPY --from=builder /app/netloc8-mcp .
-ENTRYPOINT ["./netloc8-mcp"]
+FROM alpine:3
+RUN apk add --no-cache ca-certificates
+COPY --from=build /netloc8-mcp /usr/local/bin/netloc8-mcp
+ENTRYPOINT ["netloc8-mcp"]
