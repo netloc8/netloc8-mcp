@@ -3,6 +3,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/netloc8/netloc8-mcp.svg)](https://pkg.go.dev/github.com/netloc8/netloc8-mcp)
 [![Go 1.26+](https://img.shields.io/badge/go-1.26%2B-00ADD8?logo=go)](https://go.dev/dl/)
 [![License: ELv2](https://img.shields.io/badge/license-ELv2-blue)](LICENSE)
+[![netloc8-mcp MCP server](https://glama.ai/mcp/servers/netloc8/netloc8-mcp/badges/score.svg)](https://glama.ai/mcp/servers/netloc8/netloc8-mcp)
 
 An [MCP](https://modelcontextprotocol.io) server that gives AI assistants access
 to [NetLoc8](https://netloc8.com) — IP geolocation deployed to 300+ edge
