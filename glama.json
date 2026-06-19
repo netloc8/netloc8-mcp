@@ -1,8 +1,6 @@
 {
-  "$schema": "https://glama.ai/mcp/schemas/connector.json",
+  "$schema": "https://glama.ai/mcp/schemas/server.json",
   "maintainers": [
-    {
-      "email": "tom.voss@netloc8.com"
-    }
+    "tomvoss"
   ]
 }
