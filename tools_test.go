@@ -503,7 +503,9 @@ func TestGetUsageTool(t *testing.T) {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]any{
-			"total": 15432, "cap": 100000, "period": "2026-06",
+			"totalKeys": 3, "activeKeys": 2, "totalRequests": 15432, "monthlyCap": 100000,
+			"dailyUsage": []map[string]any{},
+			"keys":       []map[string]any{},
 		})
 	}))
 	defer ts.Close()
@@ -554,6 +556,71 @@ func TestGetProfileTool(t *testing.T) {
 	text := getTextContent(t, result)
 	if !strings.Contains(text, "dev@example.com") {
 		t.Errorf("expected 'dev@example.com' in result, got: %s", text)
+	}
+}
+
+func TestGetProfileTool_APIKeyMinimal(t *testing.T) {
+	// When authenticated via API key, the profile endpoint returns
+	// a minimal response with null name/email.
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]any{
+			"id": "usr_key123", "name": nil, "email": nil,
+			"emailVerified": false, "createdAt": nil,
+		})
+	}))
+	defer ts.Close()
+
+	session, cleanup := setupTestServer(t, ts)
+	defer cleanup()
+
+	result, err := session.CallTool(context.Background(), &mcp.CallToolParams{
+		Name:      "get_profile",
+		Arguments: map[string]any{},
+	})
+	if err != nil {
+		t.Fatalf("CallTool failed: %v", err)
+	}
+	if result.IsError {
+		t.Fatalf("expected success, got error: %s", getTextContent(t, result))
+	}
+
+	text := getTextContent(t, result)
+	if !strings.Contains(text, "usr_key123") {
+		t.Errorf("expected 'usr_key123' in result, got: %s", text)
+	}
+}
+
+func TestGetUsageTool_NullMonthlyCap(t *testing.T) {
+	// Enterprise plans return monthlyCap: null (unlimited).
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]any{
+			"totalKeys": 10, "activeKeys": 8, "totalRequests": 500000,
+			"monthlyCap": nil,
+			"dailyUsage": []map[string]any{},
+			"keys":       []map[string]any{},
+		})
+	}))
+	defer ts.Close()
+
+	session, cleanup := setupTestServer(t, ts)
+	defer cleanup()
+
+	result, err := session.CallTool(context.Background(), &mcp.CallToolParams{
+		Name:      "get_usage",
+		Arguments: map[string]any{},
+	})
+	if err != nil {
+		t.Fatalf("CallTool failed: %v", err)
+	}
+	if result.IsError {
+		t.Fatalf("expected success, got error: %s", getTextContent(t, result))
+	}
+
+	text := getTextContent(t, result)
+	if !strings.Contains(text, "500000") {
+		t.Errorf("expected '500000' in result, got: %s", text)
 	}
 }
 
