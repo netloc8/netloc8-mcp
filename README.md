@@ -1,5 +1,16 @@
 # NetLoc8 MCP Server
 
+> **Note:** This repository is a read-only mirror. Please do not submit issues
+> or pull requests here; contributions and development are managed internally.
+
+> ⚠️ **Deprecated:** This Go binary is replaced by the [`@netloc8/mcp`](https://www.npmjs.com/package/@netloc8/mcp) npm package
+> and the hosted server at `mcp.netloc8.com`. See [Migration](#migration) below.
+>
+> ```bash
+> # New install (no Go required):
+> npx --yes --prefer-online @netloc8/mcp@latest
+> ```
+
 [![Go Reference](https://pkg.go.dev/badge/github.com/netloc8/netloc8-mcp.svg)](https://pkg.go.dev/github.com/netloc8/netloc8-mcp)
 [![Go 1.26+](https://img.shields.io/badge/go-1.26%2B-00ADD8?logo=go)](https://go.dev/dl/)
 [![License: ELv2](https://img.shields.io/badge/license-ELv2-blue)](LICENSE)
@@ -271,6 +282,34 @@ will match you to the right prompt automatically.
 - [Go SDK](https://pkg.go.dev/github.com/netloc8/netloc8-go)
 - [npm packages](https://www.npmjs.com/org/netloc8)
 - [MCP Specification](https://modelcontextprotocol.io)
+
+## Migration
+
+This Go binary server is deprecated in favor of:
+
+1. **npm package** — [`@netloc8/mcp`](https://www.npmjs.com/package/@netloc8/mcp) — same tools, no Go required
+2. **Hosted server** — `mcp.netloc8.com` — zero install, OAuth 2.1 auth
+
+### Migrate to npm package
+
+Replace your MCP client config:
+
+```diff
+ {
+   "mcpServers": {
+     "netloc8": {
+-      "command": "/path/to/netloc8-mcp",
++      "command": "npx",
++      "args": ["--yes", "--prefer-online", "@netloc8/mcp@latest"],
+       "env": {
+         "NETLOC8_API_KEY": "sk_live_YOUR_KEY"
+       }
+     }
+   }
+ }
+```
+
+All 14 tools, 4 prompts, and 2 resources are identical — no client-side changes needed.
 
 ## License
 
