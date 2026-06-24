@@ -90,7 +90,7 @@ type AuditLogInput struct {
 // CreateAPIKeyInput defines the parameters for creating a new API key.
 type CreateAPIKeyInput struct {
 	Name    string `json:"name"           jsonschema:"a human-readable name for the key (e.g. Production Backend)"`
-	KeyType string `json:"type,omitempty" jsonschema:"key type: secret (default, full access) or publishable (geo:read only)"`
+	KeyType string `json:"type,omitempty" jsonschema:"key type: secret (default, full access) or publishable (location:read only)"`
 }
 
 // KeyIDInput is used by tools that operate on a specific API key.
@@ -391,7 +391,7 @@ func registerCreateAPIKey(server *mcp.Server, client *netloc8.Client) {
 			Title: "Create API Key",
 			Description: "Create a new NetLoc8 API key. This is a WRITE OPERATION that modifies your account. " +
 				"The raw key value is returned once — store it securely. " +
-				"Supports 'secret' keys (full access) and 'publishable' keys (geo:read only, requires allowed origins).",
+				"Supports 'secret' keys (full access) and 'publishable' keys (location:read only, requires allowed origins).",
 			Annotations: &mcp.ToolAnnotations{
 				ReadOnlyHint:    false,
 				DestructiveHint: boolPtr(false),
